@@ -96,7 +96,11 @@ fn parse_fields_declare(fields: Group) -> Vec<String> {
             field.next_vis();
             field.next()
                 .and_then(|tt| tt.as_ident().map(ToString::to_string))
-                .filter(|_| field.peek_is(|tt| tt.is_punch(':')))
+                .filter(|_| {
+                    field.peek_is(|tt| tt.is_punch(':'))
+                        && (!field.peek_i_is(1, |tt| tt.is_punch(':'))
+                            || field.peek_i_puncts(1, "::").is_some())
+                })
         })
         .collect()
 }

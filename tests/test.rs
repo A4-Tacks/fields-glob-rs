@@ -9,8 +9,8 @@ struct Foo {
 
 #[derive(fields_glob, Debug)]
 struct Bar {
-    x: Result<i32, i32>,
-    y: i32,
+    x: Result<i32, std::string::String>,
+    y: ::std::string::String,
 }
 
 #[test]
@@ -54,9 +54,9 @@ fn build() {
 fn generic() {
     let bar = {
         let x = Ok(9);
-        Bar! { y: 4, * }
+        Bar! { y: "a".to_owned(), * }
     };
     let Bar! {*} = bar;
     assert_eq!(x, Ok(9));
-    assert_eq!(y, 4);
+    assert_eq!(y, "a".to_owned());
 }
