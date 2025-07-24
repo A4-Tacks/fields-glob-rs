@@ -7,6 +7,12 @@ struct Foo {
     z: i32,
 }
 
+#[derive(fields_glob, Debug)]
+struct Bar {
+    x: Result<i32, i32>,
+    y: i32,
+}
+
 #[test]
 fn it_works() {
     let foo = Foo::default();
@@ -42,4 +48,15 @@ fn build() {
     let foo = Foo::default();
     let Foo! { x: n, * } = foo;
     let _foo = Foo! { *, x: n+1 };
+}
+
+#[test]
+fn generic() {
+    let bar = {
+        let x = Ok(9);
+        Bar! { y: 4, * }
+    };
+    let Bar! {*} = bar;
+    assert_eq!(x, Ok(9));
+    assert_eq!(y, 4);
 }
